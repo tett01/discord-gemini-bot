@@ -2,18 +2,28 @@ require('dotenv').config();
 
 const GOOGLE_KEY = process.env.GEMINI_API_KEY?.trim();
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY?.trim();
+// 아래 둘을 지정하면 OpenAI 호환 API 를 쓰는 어떤 서비스든 연결할 수 있다.
+const CUSTOM_KEY = process.env.AI_API_KEY?.trim();
+const CUSTOM_URL = process.env.AI_BASE_URL?.trim();
 
-// 두 서비스 중 아무거나 하나만 있으면 동작한다. 둘 다 있으면 구글을 쓴다.
-const useGoogle = Boolean(GOOGLE_KEY);
-
-if (!GOOGLE_KEY && !OPENROUTER_KEY) {
+if (!GOOGLE_KEY && !OPENROUTER_KEY && !CUSTOM_KEY) {
   console.error(
-    '[설정 오류] AI API 키가 없습니다. .env 파일에 아래 둘 중 하나를 넣어 주세요.\n' +
+    '[설정 오류] AI API 키가 없습니다. .env 파일에 아래 중 하나를 넣어 주세요.\n' +
       '  GEMINI_API_KEY=...      (구글 AI Studio: https://aistudio.google.com/apikey)\n' +
-      '  OPENROUTER_API_KEY=...  (OpenRouter: https://openrouter.ai/settings/keys)'
+      '  OPENROUTER_API_KEY=...  (OpenRouter: https://openrouter.ai/settings/keys)\n' +
+      '  AI_API_KEY=... + AI_BASE_URL=...  (그 밖의 OpenAI 호환 서비스)'
   );
   process.exit(1);
 }
+
+if (CUSTOM_KEY && !CUSTOM_URL) {
+  console.error('[설정 오류] AI_API_KEY 를 쓰려면 AI_BASE_URL 도 함께 지정해야 합니다.');
+  process.exit(1);
+}
+
+// 우선순위: 직접 지정 > 구글 > OpenRouter
+const selected = CUSTOM_KEY ? 'custom' : GOOGLE_KEY ? 'google' : 'openrouter';
+const useGoogle = selected === 'google';
 
 if (!process.env.DISCORD_TOKEN?.trim()) {
   console.error('[설정 오류] 환경 변수 DISCORD_TOKEN 가 비어 있습니다. .env 파일을 확인해 주세요.');
@@ -29,6 +39,16 @@ const PROVIDERS = {
     defaultModel: 'gemini-2.5-flash',
     keyPage: 'https://aistudio.google.com/apikey',
   },
+  custom: {
+    name: process.env.AI_PROVIDER_NAME?.trim() || '사용자 지정 AI 서비스',
+    // 주소 끝에 /chat/completions 가 없으면 붙여 준다 (흔한 실수 방지)
+    url: /\/chat\/completions\/?$/.test(CUSTOM_URL || '')
+      ? CUSTOM_URL
+      : `${(CUSTOM_URL || '').replace(/\/$/, '')}/chat/completions`,
+    key: CUSTOM_KEY,
+    defaultModel: 'gpt-4o-mini',
+    keyPage: '사용 중인 서비스의 API 키 페이지',
+  },
   openrouter: {
     name: 'OpenRouter',
     url: 'https://openrouter.ai/api/v1/chat/completions',
@@ -38,12 +58,12 @@ const PROVIDERS = {
   },
 };
 
-const provider = PROVIDERS[useGoogle ? 'google' : 'openrouter'];
+const provider = PROVIDERS[selected];
 
 module.exports = {
   DISCORD_TOKEN: process.env.DISCORD_TOKEN.trim(),
 
-  PROVIDER: useGoogle ? 'google' : 'openrouter',
+  PROVIDER: selected,
   PROVIDER_NAME: provider.name,
   API_URL: provider.url,
   API_KEY: provider.key,

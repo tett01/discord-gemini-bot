@@ -2,7 +2,7 @@
 
 관리자가 `/채널설정`으로 지정한 채널에서, **멘션이나 접두사 없이** 올라오는 모든 메시지에 AI가 답변하는 디스코드 봇입니다.
 
-**구글 AI Studio**와 **OpenRouter** 를 모두 지원합니다. `.env` 에 넣은 키에 따라 자동으로 선택됩니다.
+**구글 AI Studio**, **OpenRouter**, 그리고 **OpenAI 호환 API 를 제공하는 모든 서비스**(Groq, Cerebras, Mistral, GitHub Models 등)를 지원합니다. `.env` 에 넣은 키에 따라 자동으로 선택됩니다.
 
 ## 1. 설치
 
