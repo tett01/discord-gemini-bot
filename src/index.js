@@ -13,7 +13,7 @@ const {
 
 const config = require('./config');
 const store = require('./store');
-const { askOpenRouter } = require('./openrouter');
+const { askAI } = require('./ai');
 
 const DISCORD_MAX_LENGTH = 2000;
 
@@ -61,7 +61,7 @@ async function registerCommands(applicationId) {
 client.once(Events.ClientReady, async (readyClient) => {
   console.log('봇이 준비되었습니다!');
   console.log(`로그인 계정: ${readyClient.user.tag}`);
-  console.log(`사용 모델: ${config.MODEL}`);
+  console.log(`AI 서비스: ${config.PROVIDER_NAME} / 모델: ${config.MODEL}`);
   console.log(`활성화된 채널: ${store.list().length}개`);
   console.log(`설정 저장 위치: ${store.dataDir} (쓰기 ${store.isPersistent() ? '가능' : '불가'})`);
 
@@ -118,6 +118,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       case '상태': {
         await interaction.reply({
           content: [
+            `**AI 서비스**: ${config.PROVIDER_NAME}`,
             `**모델**: \`${config.MODEL}\``,
             `**이 채널 활성화**: ${store.isActive(interaction.channelId) ? '예' : '아니오'}`,
             `**전체 활성 채널 수**: ${store.list().length}개`,
@@ -162,7 +163,7 @@ client.on(Events.MessageCreate, async (message) => {
       { role: 'user', content: `${message.author.displayName}: ${content}` },
     ];
 
-    const answer = await askOpenRouter(messages);
+    const answer = await askAI(messages);
 
     // 성공했을 때만 기록에 남긴다.
     const updated = [

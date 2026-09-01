@@ -1,6 +1,8 @@
-# 제미나이 — OpenRouter 디스코드 챗봇
+# 제미나이 — AI 디스코드 챗봇
 
-관리자가 `/채널설정`으로 지정한 채널에서, **멘션이나 접두사 없이** 올라오는 모든 메시지에 OpenRouter API로 답변하는 디스코드 봇입니다.
+관리자가 `/채널설정`으로 지정한 채널에서, **멘션이나 접두사 없이** 올라오는 모든 메시지에 AI가 답변하는 디스코드 봇입니다.
+
+**구글 AI Studio**와 **OpenRouter** 를 모두 지원합니다. `.env` 에 넣은 키에 따라 자동으로 선택됩니다.
 
 ## 1. 설치
 
@@ -29,8 +31,9 @@ cp .env.example .env
 
 ```env
 DISCORD_TOKEN=<디스코드_개발자_포털에서_복사한_봇_토큰>
-OPENROUTER_API_KEY=<openrouter.ai/keys 에서_발급받은_키>
-OPENROUTER_MODEL=google/gemini-2.5-flash
+# 아래 둘 중 하나만 채우면 됩니다
+GEMINI_API_KEY=<aistudio.google.com/apikey 에서_발급>
+# OPENROUTER_API_KEY=<openrouter.ai/settings/keys 에서_발급>
 ```
 
 ## 4. 실행
@@ -59,7 +62,7 @@ npm start
 ```
 index.js           호스팅 패널용 진입점 (src/index.js 를 실행)
 src/index.js       봇 본체 (이벤트 처리, 슬래시 명령어)
-src/openrouter.js  OpenRouter API 호출 + 재시도/타임아웃
+src/ai.js          AI API 호출 (구글/OpenRouter 공용) + 재시도/타임아웃
 src/store.js       활성 채널 저장 (data/channels.json)
 src/config.js      .env 로딩 및 기본값
 Dockerfile         컨테이너 배포용
@@ -71,6 +74,6 @@ DEPLOY.md          Katabump / Pella / Northflank 배포 가이드
 | 증상 | 원인 |
 |---|---|
 | 봇이 아무 반응 없음 | MESSAGE CONTENT INTENT 미설정 / `/채널설정` 안 함 |
-| `401` 오류 | `OPENROUTER_API_KEY` 오류 |
-| `404 모델을 찾을 수 없습니다` | `OPENROUTER_MODEL` ID 오타 — https://openrouter.ai/models 에서 확인 |
+| `401` / 키 오류 | API 키가 잘못됨. 키를 다시 발급 |
+| `404 모델을 찾을 수 없습니다` | `AI_MODEL` ID 오타 (구글은 `gemini-2.5-flash`, OpenRouter는 `google/gemini-2.5-flash`) |
 | 슬래시 명령어가 안 보임 | 전역 등록은 반영에 몇 분 걸릴 수 있음. 디스코드 재시작 |

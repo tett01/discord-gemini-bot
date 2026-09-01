@@ -1,18 +1,18 @@
 const config = require('./config');
 
-const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const RETRYABLE = new Set([408, 429, 500, 502, 503, 504]);
 const MAX_ATTEMPTS = 3;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * OpenRouter Chat Completions 호출.
+ * AI 챗 API 호출 (구글 AI Studio / OpenRouter 공용).
+ * 구글도 OpenAI 호환 엔드포인트를 제공하므로 요청 형식은 동일하다.
  * @param {{role: 'system'|'user'|'assistant', content: string}[]} messages
  * @returns {Promise<string>} 모델의 답변 텍스트
  * @throws {Error} 호출자가 잡아서 사용자에게 안내할 수 있도록 한국어 메시지를 담은 에러
  */
-async function askOpenRouter(messages) {
+async function askAI(messages) {
   let lastError;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -20,14 +20,15 @@ async function askOpenRouter(messages) {
     const timer = AbortSignal.timeout(config.REQUEST_TIMEOUT_MS);
 
     try {
-      const res = await fetch(ENDPOINT, {
+      const res = await fetch(config.API_URL, {
         method: 'POST',
         signal: timer,
         headers: {
-          Authorization: `Bearer ${config.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${config.API_KEY}`,
           'Content-Type': 'application/json',
-          // OpenRouter 대시보드 통계용(선택 항목)
-          'X-Title': config.BOT_NAME,
+          // OpenRouter 대시보드 통계용(구글에서는 무시됨).
+          // HTTP 헤더는 ASCII 만 허용하므로 한글 봇 이름을 그대로 넣으면 안 된다.
+          'X-Title': 'discord-gemini-bot',
         },
         body: JSON.stringify({
           model: config.MODEL,
@@ -74,16 +75,21 @@ async function askOpenRouter(messages) {
 }
 
 function describeStatus(status, detail) {
+  // 구글은 키가 잘못돼도 400 으로 응답하므로, 본문을 보고 키 문제인지 판별한다.
+  if (status === 400 && /api[ _-]?key/i.test(detail)) {
+    return `${config.PROVIDER_NAME} API 키가 올바르지 않습니다. 키를 다시 발급받아 주세요: ${config.KEY_PAGE}`;
+  }
+
   const messages = {
-    400: '요청 형식이 올바르지 않습니다. 모델 ID(OPENROUTER_MODEL)를 확인해 주세요.',
-    401: 'OpenRouter API 키가 올바르지 않습니다. .env의 OPENROUTER_API_KEY를 확인해 주세요.',
-    402: 'OpenRouter 크레딧이 부족합니다.',
+    400: `요청 형식이 올바르지 않습니다. 모델 ID(AI_MODEL=${config.MODEL})를 확인해 주세요.`,
+    401: `${config.PROVIDER_NAME} API 키가 올바르지 않습니다. 키를 다시 발급받아 주세요: ${config.KEY_PAGE}`,
+    402: `${config.PROVIDER_NAME} 크레딧이 부족합니다.`,
     403: '해당 모델에 접근 권한이 없습니다.',
     404: `모델을 찾을 수 없습니다: ${config.MODEL}`,
-    429: '요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.',
+    429: '요청이 너무 많습니다. 잠시 후 다시 시도해 주세요. (무료 등급 사용량 제한일 수 있습니다)',
   };
-  const base = messages[status] ?? `OpenRouter 오류 (HTTP ${status})`;
+  const base = messages[status] ?? `${config.PROVIDER_NAME} 오류 (HTTP ${status})`;
   return detail ? `${base}\n${detail}` : base;
 }
 
-module.exports = { askOpenRouter };
+module.exports = { askAI };

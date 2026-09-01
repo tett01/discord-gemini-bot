@@ -52,8 +52,7 @@ Pterodactyl 패널은 임의의 환경변수를 추가하기 어렵기 때문에
 
 ```env
 DISCORD_TOKEN=여기에_봇_토큰
-OPENROUTER_API_KEY=여기에_오픈라우터_키
-OPENROUTER_MODEL=google/gemini-2.5-flash
+GEMINI_API_KEY=여기에_구글_AI_스튜디오_키
 BOT_NAME=제미나이
 ```
 
@@ -112,8 +111,8 @@ Files 탭에서 파일을 직접 수정하거나, Console 에서 `git pull` 후 
 | Key | Value |
 |---|---|
 | `DISCORD_TOKEN` | 봇 토큰 |
-| `OPENROUTER_API_KEY` | `sk-or-v1-...` |
-| `OPENROUTER_MODEL` | `google/gemini-2.5-flash` |
+| `GEMINI_API_KEY` | 구글 AI Studio 키 (또는 `OPENROUTER_API_KEY`) |
+
 | `ACTIVE_CHANNEL_IDS` | 채널 ID (컨테이너 재생성 대비) |
 
 5. Start → 로그에서 `봇이 준비되었습니다!` 확인
@@ -142,7 +141,7 @@ Files 탭에서 파일을 직접 수정하거나, Console 에서 `git pull` 후 
 | `Cannot find module 'discord.js'` | `npm install` 미실행. Console 에서 직접 실행 |
 | 봇은 온라인인데 아무 반응 없음 | ① 개발자 포털의 **MESSAGE CONTENT INTENT** 미설정 ② `/채널설정` 안 함 |
 | 슬래시 명령어가 안 보임 | 전역 등록은 반영에 시간이 걸립니다. 디스코드 앱 재시작 (Ctrl+R) |
-| 채널에 `401` 오류 답변 | `OPENROUTER_API_KEY` 오류 |
-| 채널에 `402` 오류 답변 | OpenRouter 크레딧 부족 |
-| 채널에 `404 모델을 찾을 수 없습니다` | `OPENROUTER_MODEL` ID 오타. https://openrouter.ai/models 확인 |
+| 채널에 키 오류 답변 | API 키가 잘못됨. 키를 다시 발급받아 교체 |
+| 채널에 크레딧 부족 답변 | 사용량 한도 초과. 잠시 후 재시도하거나 크레딧 충전 |
+| 채널에 `404 모델을 찾을 수 없습니다` | `AI_MODEL` ID 오타 (구글: `gemini-2.5-flash`) |
 | 서버가 갑자기 사라짐 | 무료 등급 갱신(Renew) 기한 초과. 재생성 후 다시 업로드 |
