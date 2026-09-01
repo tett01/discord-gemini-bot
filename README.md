@@ -57,10 +57,13 @@ npm start
 ## 파일 구조
 
 ```
+index.js           호스팅 패널용 진입점 (src/index.js 를 실행)
 src/index.js       봇 본체 (이벤트 처리, 슬래시 명령어)
 src/openrouter.js  OpenRouter API 호출 + 재시도/타임아웃
 src/store.js       활성 채널 저장 (data/channels.json)
 src/config.js      .env 로딩 및 기본값
+Dockerfile         컨테이너 배포용
+DEPLOY.md          Pella / Northflank 배포 가이드
 ```
 
 ## 문제 해결

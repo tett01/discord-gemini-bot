@@ -7,6 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
+COPY index.js ./
 COPY src ./src
 
 # 볼륨을 붙이지 않아도 동작하도록 기본 데이터 폴더를 미리 만들어 둔다
