@@ -1,0 +1,17 @@
+{
+  "name": "gemini-discord-bot",
+  "version": "1.0.0",
+  "description": "OpenRouter API를 사용하는 디스코드 챗봇 '제미나이'",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  }
+}
