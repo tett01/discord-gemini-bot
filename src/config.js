@@ -76,10 +76,10 @@ module.exports = {
     (!useGoogle && process.env.OPENROUTER_MODEL?.trim()) ||
     provider.defaultModel,
 
-  BOT_NAME: process.env.BOT_NAME?.trim() || '제미나이',
+  BOT_NAME: process.env.BOT_NAME?.trim() || '그록',
   SYSTEM_PROMPT:
     process.env.SYSTEM_PROMPT?.trim() ||
-    '당신은 디스코드 서버에서 활동하는 "제미나이"라는 이름의 AI 도우미입니다. ' +
+    '당신은 디스코드 서버에서 활동하는 "그록"이라는 이름의 AI 도우미입니다. ' +
       '한국어로, 친절하고 정확하게 답변하세요. 답변은 되도록 2000자를 넘지 않게 정리해서 말합니다.',
 
   HISTORY_TURNS: Number(process.env.HISTORY_TURNS) || 10,

@@ -36,11 +36,11 @@ const busyChannels = new Set();
 const commands = [
   new SlashCommandBuilder()
     .setName('채널설정')
-    .setDescription('이 채널에서 제미나이가 모든 메시지에 답변하도록 켭니다.')
+    .setDescription('이 채널에서 그록이 모든 메시지에 답변하도록 켭니다.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild), // 관리자 전용
   new SlashCommandBuilder()
     .setName('채널해제')
-    .setDescription('이 채널에서 제미나이의 자동 답변을 끕니다.')
+    .setDescription('이 채널에서 그록의 자동 답변을 끕니다.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
   new SlashCommandBuilder()
     .setName('초기화')

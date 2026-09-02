@@ -53,7 +53,7 @@ Pterodactyl 패널은 임의의 환경변수를 추가하기 어렵기 때문에
 ```env
 DISCORD_TOKEN=여기에_봇_토큰
 GEMINI_API_KEY=여기에_구글_AI_스튜디오_키
-BOT_NAME=제미나이
+BOT_NAME=그록
 ```
 
 > `.env.example` 파일이 함께 들어있으니, 그걸 복사해서 이름만 `.env` 로 바꿔도 됩니다.
@@ -78,7 +78,7 @@ BOT_NAME=제미나이
 
 ```
 봇이 준비되었습니다!
-로그인 계정: 제미나이#1234
+로그인 계정: 그록#1234
 사용 모델: google/gemini-2.5-flash
 슬래시 명령어를 등록했습니다.
 ```
