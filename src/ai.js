@@ -28,7 +28,7 @@ async function askAI(messages) {
           'Content-Type': 'application/json',
           // OpenRouter 대시보드 통계용(구글에서는 무시됨).
           // HTTP 헤더는 ASCII 만 허용하므로 한글 봇 이름을 그대로 넣으면 안 된다.
-          'X-Title': 'discord-gemini-bot',
+          'X-Title': 'discord-groq-bot',
         },
         body: JSON.stringify({
           model: config.MODEL,

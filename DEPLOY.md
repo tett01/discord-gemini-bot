@@ -22,7 +22,7 @@ Katabump은 **Pterodactyl 패널**을 씁니다. Pella 같은 자동 배포형�
 
 > ⚠️ **무료 서버는 주기적으로 갱신(Renew)해야 합니다.** 대시보드에 남은 기간이
 > 표시되며, 기간이 지나면 서버가 삭제될 수 있습니다. 달력에 알림을 걸어두세요.
-> 코드는 GitHub(https://github.com/tett01/discord-gemini-bot)에 있으니 삭제돼도
+> 코드는 GitHub(https://github.com/tett01/discord-groq-bot)에 있으니 삭제돼도
 > 다시 만들면 됩니다.
 
 ## 2. 파일 업로드
@@ -37,7 +37,7 @@ Katabump은 **Pterodactyl 패널**을 씁니다. Pella 같은 자동 배포형�
 **방법 2 — GitHub에서 바로 받기 (Console 사용)**
 저장소가 Public이라 토큰 없이 받을 수 있습니다. **Console** 탭에서:
 ```
-git clone https://github.com/tett01/discord-gemini-bot.git .
+git clone https://github.com/tett01/discord-groq-bot.git .
 ```
 
 압축을 푼 뒤 `/home/container` 바로 아래에 `index.js`, `package.json`, `src/` 가
@@ -103,7 +103,7 @@ Files 탭에서 파일을 직접 수정하거나, Console 에서 `git pull` 후 
 # B. Pella 배포
 
 1. https://pella.app → 디스코드 계정으로 로그인 → 봇 생성
-2. GitHub 저장소 `tett01/discord-gemini-bot` 연결 (또는 ZIP 업로드)
+2. GitHub 저장소 `tett01/discord-groq-bot` 연결 (또는 ZIP 업로드)
 3. Runtime **Node.js 18+**, Main file `index.js`
 4. **Environment / Variables** 메뉴에 아래 입력
    (메뉴가 없으면 A안 3번처럼 `.env` 파일을 만들어도 됩니다)
@@ -123,7 +123,7 @@ Files 탭에서 파일을 직접 수정하거나, Console 에서 `git pull` 후 
 
 1. **Integrations → GitHub** 연결 → **Create new → Project**
 2. **Create new → Service → Combined service**
-   - Repository `tett01/discord-gemini-bot`, Branch `main`
+   - Repository `tett01/discord-groq-bot`, Branch `main`
    - Build type **Dockerfile** (`/Dockerfile`, context `/`)
    - **Ports 전부 삭제** (열어두면 헬스체크 실패로 계속 재시작될 수 있음.
      굳이 열려면 환경변수 `PORT=8080` 을 함께 넣으세요)
